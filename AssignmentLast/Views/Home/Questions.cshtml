@@ -1,0 +1,207 @@
+﻿@model Questions
+<html>
+<head>
+    <title>Question @Model.Id</title>
+
+    <style>
+        .previous {
+            background-color: #f1f1f1;
+            color: black;
+        }
+
+        .previous {
+            background-color: #f1f1f1;
+            color: black;
+        }
+
+        /* form {
+            margin: 5% auto;
+            padding: 10px;
+            width: 800px;
+            background: #241b56;
+            border-radius: 25px;
+            box-shadow: 2px 4px 8px 5px hsla(0, 0%, 0%, 0.2), 2px 6px 20px 5px rgba(0, 0, 0, 0.5);
+        } */
+        form {
+            margin: 5% auto;
+            padding: 10px;
+            max-width: 800px; /* Set a maximum width for larger screens */
+            width: 90%; /* Set a percentage width for smaller screens */
+            background: #241b56;
+            border-radius: 25px;
+            box-shadow: 2px 4px 8px 5px hsla(0, 0%, 0%, 0.2), 2px 6px 20px 5px rgba(0, 0, 0, 0.5);
+        }
+
+            form .qusnHeader {
+                height: 125px;
+                color: #fff;
+                background: #241b56;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                border-radius: 25px 25px 0 0;
+                box-shadow: 0px 3px 5px 1px rgba(0, 0, 0, 0.1);
+            }
+
+        .qusnHeader .title {
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+
+        .timer_text {
+            display: inline-block;
+            font-weight: 600;
+            padding-left: 10px;
+        }
+
+        .question {
+            color: #fff;
+            font-size: 25px;
+            font-weight: 600;
+            padding-left: 20px;
+        }
+
+        .radioContainer {
+            height: 50px;
+            background-color: #fff;
+            font-size: 18px;
+            margin: 10px;
+            padding-left: 20px;
+            border-radius: 10px;
+            display: flex;
+            justify-content: left;
+            align-items: center;
+            border: 2px solid black;
+            cursor: pointer;
+        }
+
+            .radioContainer:hover {
+                color: #241b56;
+                background-color: #c1c8f8;
+            }
+
+        .radioContainer label {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .radioButton {
+            display: inline-block;
+            height: 20px;
+            width: 20px;
+        }
+
+        .submitBtn {
+            display: flex;
+            justify-content: right;
+            margin-right: 15px;
+        }
+        @@media screen and (max-width: 600px) {
+        form {
+            width: 100%; /* Set a 100% width for screens smaller than 600px */
+        }
+    }
+    </style>
+</head>
+
+<body>
+    @* @if ((bool)ViewData["PrevQuestion"] == true)
+    {
+        <a href="PreviousQuestion?qaId=@ViewData["QuestionId"]">Previous</a>
+    } *@
+    @if ((bool)ViewData["Next"] == true)
+    {
+        <a href="NextQuestion?qaId=@ViewData["QuestionId"]">Next</a>
+    }
+
+    
+    <form method="post" action="submitAnswer">
+        <header class="qusnHeader">
+            <div class="title">Quizomania</div>
+            <div class="questionCounter">
+                @ViewData["CurrentQuestionIndex"] of 10
+            </div>
+            <div class="timer">
+                <div class="timer_text">Time Left:</div>
+                <div class="timer_text" id="timer_sec">15</div>
+            </div>
+        </header>
+
+        <label class="question">@Model.Question</label>
+        <input type="hidden" name="QuestionAnswerId" value="@ViewData["QuestionId"]" />
+        <input type="hidden" name="id" value="@Model.Id" />
+
+        <div class="radioContainer" onclick="selectRadioButton('option1')">
+            <label>
+                <input id="option1" class="radioButton" type="radio" name="option" value="A" />&nbsp; @Model.QuestionOne
+            </label>
+        </div>
+        <div class="radioContainer" onclick="selectRadioButton('option2')">
+            <label>
+                <input id="option2" class="radioButton" type="radio" name="option" value="B" />&nbsp; @Model.QuestionTwo
+            </label>
+        </div>
+        <div class="radioContainer" onclick="selectRadioButton('option3')">
+            <label>
+                <input id="option3" class="radioButton" type="radio" name="option" value="C" />&nbsp; @Model.QuestionThree
+            </label>
+        </div>
+        <div class="radioContainer" onclick="selectRadioButton('option4')">
+            <label>
+                <input id="option4" class="radioButton" type="radio" name="option" value="D" />&nbsp; @Model.QuestionFour
+            </label>
+        </div>
+        <div class="submitBtn">
+            <input type="Submit" class="btn btn-primary" name="submit" value="Submit"/>
+        </div>
+    </form>
+    <script>
+        let timeLimit = 15;
+        let timerInterval;
+        let timerExpired = false;
+
+        function startTimer() {
+            timerInterval = setInterval(updateTimer, 1000);
+        }
+
+        function updateTimer() {
+            timeLimit--;
+            if (timeLimit <= 0) {
+                clearInterval(timerInterval);
+                timerExpired = true;
+                disableOptions();
+            }
+            document.getElementById("timer_sec").innerText = timeLimit;
+            
+        }
+
+        function disableOptions() {
+            if (timerExpired) {
+                const radioButtons = document.getElementsByName("option");
+                for (let i = 0; i < radioButtons.length; i++) {
+                    radioButtons[i].disabled = true;
+                }
+                const optionDivs = document.getElementsByClassName("radioContainer");
+
+                for (let i = 0; i < optionDivs.length; i++) {
+                    optionDivs[i].classList.add("disabled");
+                    optionDivs[i].onclick = null; // Remove the onclick handler
+                }
+            }
+        }
+        
+        function selectRadioButton(optionId) {
+            // Get the radio button element based on the provided ID
+            var radioButton = document.getElementById(optionId);
+
+            // Check the radio button when the container is clicked
+            radioButton.checked = true;
+        }
+
+        startTimer();
+    </script>
+
+</body>
+</html>

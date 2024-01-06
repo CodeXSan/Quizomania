@@ -1,0 +1,39 @@
+﻿<!-- <div class="text-center">
+   Your Score is @ViewData["Score"]. View Full Score history <a href="history">History</a>.
+   Go to homePage <a href="../">Home</a>
+</div>
+-->
+<link href="~/css/style.css" rel="stylesheet" />
+
+
+<div class="result_box">
+          <!-- <div class="complete_text">You've completed the Quiz!</div>
+        <div class="score_text">
+           <span>and sorry, You got only <p>2</p> out of <p>10</p></span>
+        </div> -->
+
+          <div class="congratulationBox">
+              <div class="curve">
+                  <div class="icon">
+                      <i class="fa-solid fa-award" style="color: #8400ff;"></i>
+                  </div>
+                  <div class="icon">
+                      <i class="fa-solid fa-sun"></i>
+                  </div>
+                  <div class="icon">
+                      <i class="fa-solid fa-star"></i>
+                  </div>
+              </div>
+              <div class="text">
+                  <h1>Congratulations</h1>
+                  <div class="complete_text">You've completed the Quiz!</div>
+                  <div class="text-center">
+                  <h5><b>Your Score is @ViewData["Score"].</b></h5>
+                  View Full Score <a href="history">History</a>.
+                  </div>
+              </div>
+              <div class="buttons">
+                  <button class="quit" onclick="location.href='@Url.Action("Index")'">Quit Quiz</button>
+              </div>
+          </div>
+      </div>

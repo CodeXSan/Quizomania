@@ -1,0 +1,15 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+<link href="~/css/style.css" rel="stylesheet" />
+
+
+    <div class="login-container" >
+        <h1>Get Into Quiz</h1>
+        <form id="login-form" method="post" asp-action="PostIndex">
+        <input type="text" id="username" name="name" placeholder="&#Xf2bd; Please Enter Your Full Name" autocomplete="off" required />
+            <input type="submit" class="btn-primary startBtn" value="Let's Get Started" />
+            @* <button type="submit" id="login" class="btn-primary">Start</button> *@
+        </form>
+        <p>View Full Score <a href="/home/history">History</a></p>
+    </div>
